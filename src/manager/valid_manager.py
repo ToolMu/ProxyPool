@@ -9,7 +9,7 @@ from src.utils.constant import THREADNUM, REDIS_HOST, REDIS_PRODUCTION_CHANNEL
 from src.utils.constant import MYSQL_HOME, MYSQL_USER, MYSQL_PASSWD, MYSQL_PROXY_CHANNEL
 
 
-class ValidManaer:
+class ValidManager:
     def __init__(self):
         self._connect_pool = redis.ConnectionPool(host=REDIS_HOST)
         self._mysql_con = pymysql.connect(MYSQL_HOME, MYSQL_USER, MYSQL_PASSWD, MYSQL_PROXY_CHANNEL)
@@ -36,4 +36,4 @@ class ValidManaer:
 
 
 if __name__ == '__main__':
-    ValidManaer().consumption()
+    ValidManager().consumption()
