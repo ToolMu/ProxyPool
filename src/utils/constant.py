@@ -1,0 +1,8 @@
+
+REQUESTS_TIMEOUT = 10
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = '6379'
+REDIS_PASSWORD = None
+
+REDIS_PRODUCTION_CHANNEL = "proxy:production:channel"
