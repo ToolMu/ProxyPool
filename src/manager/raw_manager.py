@@ -46,6 +46,7 @@ if __name__ == '__main__':
     # time.sleep(3)
     # print(list(GetterManager().random_proxy_get()))
     # print(list(GetterManager().specially_proxy_get('kuaidaili')))
-    proxy_ips = GetterManager().specially_proxy_get('kuaidaili')
+    # proxy_ips = GetterManager().specially_proxy_get('kuaidaili')
+    proxy_ips = GetterManager().random_proxy_get()
     ProductionManager().production(proxy_ips)
     print("OK!")

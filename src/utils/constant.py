@@ -14,3 +14,5 @@ MYSQL_HOME = "localhost"
 MYSQL_USER = "root"
 MYSQL_PASSWD = "123456"
 MYSQL_PROXY_CHANNEL = "proxypool"
+
+REFRESH_NUM = 20
