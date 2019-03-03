@@ -4,6 +4,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 from src.manager.raw_manager import ProductionManager
 from src.manager.refresh_manager import RefreshManager
+from src.utils.log_handler import Logger
 
 
 class ProxyRefreshScheduler:
@@ -21,6 +22,7 @@ class ProxyRefreshScheduler:
     def _run():
         proxy_data = RefreshManager().refresh()
         ProductionManager().production(proxy_data)
+        Logger("ProxyPool").get_log().info("[ProxyRefreshScheduler] Refresh Proxy And Add To The Production Queue")
 
 
 if __name__ == '__main__':

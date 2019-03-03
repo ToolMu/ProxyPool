@@ -1,12 +1,10 @@
 import requests
-import pymysql
 
 from src.utils.constant import VALID_URL, REQUESTS_TIMEOUT
 
-
 class ProxyValid:
     @staticmethod
-    def valid_proxy(proxy):
+    def valid_proxy(proxy, logger):
         """
         检验代理是否可用
         """
@@ -16,15 +14,18 @@ class ProxyValid:
         proxies = {
             "http": "http://{proxy}".format(proxy=proxy)
         }
+        header = {
+            "Connection": "close"
+        }
 
         try:
-            response = requests.get(VALID_URL, proxies=proxies, timeout=REQUESTS_TIMEOUT, verify=False)
+            response = requests.get(VALID_URL, headers=header, proxies=proxies, timeout=REQUESTS_TIMEOUT, verify=False)
             if response.status_code == 200 and response.json().get("origin"):
                 return True, proxy
         except Exception as e:
-            pass
+            return False, e
 
-        return False, None
+        return False, "No why"
 
 
 if __name__ == '__main__':

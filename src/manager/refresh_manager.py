@@ -5,8 +5,7 @@ from src.utils.constant import MYSQL_HOME, MYSQL_USER, MYSQL_PASSWD, MYSQL_PROXY
 from src.utils.constant import REFRESH_NUM
 
 
-class RefreshManager:
-    __metaclass__ = SingletonMetaClass
+class RefreshManager(metaclass=SingletonMetaClass):
 
     def __init__(self):
         self._mysql_con = pymysql.connect(MYSQL_HOME, MYSQL_USER, MYSQL_PASSWD, MYSQL_PROXY_CHANNEL)
