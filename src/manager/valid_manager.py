@@ -27,7 +27,6 @@ class ValidManager:
 
     def _save(self, status):
         if status is not None and isinstance(status, tuple) and status[0]:
-            self._logger.info("[ValidManager] >> Get Using One {}".format(status[1]))
             insert_sql = "INSERT INTO {base_name}.proxyip (ip_str, ip_in_time) VALUES ('{ip_info}', '{new_time}')".format(
                 base_name=MYSQL_PROXY_CHANNEL, ip_info=status[1], new_time=str(time.time())
             )
@@ -35,8 +34,10 @@ class ValidManager:
             try:
                 _mysql_cursor.execute(insert_sql)
                 self._mysql_con.commit()
+                self._logger.info("[ValidManager] >> Get Using One {}".format(status[1]))
             except Exception as e:
                 self._mysql_con.rollback()
+                self._logger.info("[ValidManager] >> lose save Using One {}".format(status[1]))
         else:
             self._logger.warning("[ValidManager] >> Lose One: {}".format(status[1]))
 

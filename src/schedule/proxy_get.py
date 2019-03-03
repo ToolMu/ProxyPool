@@ -11,7 +11,7 @@ class ProxyGetScheduler:
     @staticmethod
     def run():
         proxy_get_scheduler = BackgroundScheduler()
-        proxy_get_scheduler.add_job(ProxyGetScheduler._run, 'interval', minutes=3)
+        proxy_get_scheduler.add_job(ProxyGetScheduler._run, 'interval', minutes=2)
         proxy_get_scheduler.start()
 
         while True:

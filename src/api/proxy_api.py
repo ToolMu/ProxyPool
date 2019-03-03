@@ -85,7 +85,7 @@ class ProxyPoolStatus(MethodView):
 
         _mysql_con.close()
 
-        return {'proxy_ip_numbers': ip_numbers}
+        return {'proxy_ip_numbers': ip_numbers[0]}
 
 
 app.add_url_rule('/proxy_ips', view_func=ProxyIPS.as_view("proxy_ips"))

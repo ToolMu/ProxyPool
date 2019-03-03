@@ -2,7 +2,7 @@ import logging
 import os
 
 from src.utils.singleton import SingletonMetaClass
-from src.utils.constant import LOG_DIR
+from config_path import LOG_DIR
 
 
 class Logger(metaclass=SingletonMetaClass):

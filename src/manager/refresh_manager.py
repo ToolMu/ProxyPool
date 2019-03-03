@@ -2,6 +2,7 @@ import pymysql
 
 from src.utils.singleton import SingletonMetaClass
 from src.utils.constant import MYSQL_HOME, MYSQL_USER, MYSQL_PASSWD, MYSQL_PROXY_CHANNEL
+from src.utils.constant import MAX_IP
 from src.utils.constant import REFRESH_NUM
 
 
@@ -12,6 +13,10 @@ class RefreshManager(metaclass=SingletonMetaClass):
 
     def refresh(self):
         _mysql_cursor = self._mysql_con.cursor()
+
+        _mysql_cursor.execute("SELECT count(*) FROM proxyip")
+        if _mysql_cursor.fetchone()[0] < MAX_IP:
+            return []
 
         select_sql = "SELECT ip_str FROM proxyip ORDER BY ip_in_time, ip_id LIMIT 0, {}".format(REFRESH_NUM)
         _mysql_cursor.execute(select_sql)
