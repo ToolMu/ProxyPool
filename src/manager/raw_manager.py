@@ -1,5 +1,6 @@
 import time
 from random import sample, seed
+from collections import Generator
 
 import redis
 
@@ -15,11 +16,16 @@ class ProductionManager(metaclass=SingletonMetaClass):
         self._connect_pool = redis.ConnectionPool(host=REDIS_HOST)
 
     def production(self, iterator):
+        if isinstance(iterator, Generator):
+            iterator = list(iterator)
+
         redis_con = redis.Redis(connection_pool=self._connect_pool)
         log_handler = Logger("ProxyPool").get_log()
+
         for item in iterator:
             redis_con.lpush(REDIS_PRODUCTION_CHANNEL, item)
-            log_handler.info("[ProductionManager] >> add to the mq: {}".format(item))
+
+        log_handler.info("[ProductionManager] add to the mq: {}".format(iterator))
 
 
 class GetterManager(metaclass=SingletonMetaClass):
@@ -35,8 +41,10 @@ class GetterManager(metaclass=SingletonMetaClass):
     def random_proxy_get(self):
         log_handler = Logger("ProxyPool").get_log()
         seed(time.time())
+
         choose_channel = sample(self._channels.keys(), 1)[0]
         log_handler.info("[GetterManager] >> The channel is {}".format(choose_channel))
+
         return self._channels[choose_channel]()
 
     def specially_proxy_get(self, channel):

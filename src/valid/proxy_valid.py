@@ -2,9 +2,10 @@ import requests
 
 from src.utils.constant import VALID_URL, REQUESTS_TIMEOUT
 
+
 class ProxyValid:
     @staticmethod
-    def valid_proxy(proxy, logger):
+    def valid_proxy(proxy):
         """
         检验代理是否可用
         """
@@ -25,9 +26,4 @@ class ProxyValid:
         except Exception as e:
             return False, e
 
-        return False, "No why"
-
-
-if __name__ == '__main__':
-    http_proxy = "212.83.145.167:54321"
-    print(ProxyValid.valid_proxy(http_proxy))
+        return False, "No Way"

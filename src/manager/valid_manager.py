@@ -22,7 +22,7 @@ class ValidManager:
         while True:
             rcon = redis.Redis(connection_pool=self._connect_pool)
             proxy_task = rcon.blpop(REDIS_PRODUCTION_CHANNEL, 0)[1]
-            self._valid_pool.add(ProxyValid.valid_proxy, (proxy_task, self._logger,), self._save)
+            self._valid_pool.add(ProxyValid.valid_proxy, (proxy_task,), self._save)
             self._logger.info("[ValidManager] >> add {} to valid Queue!".format(proxy_task))
 
     def _save(self, status):
