@@ -1,20 +1,29 @@
+import os
 
-REQUESTS_TIMEOUT = 10
+from src.utils.config import Config
+from config_path import CONF_DIR
 
-REDIS_HOST = 'localhost'
-REDIS_PORT = '6379'
-REDIS_PASSWORD = None
+file_name = os.path.join(CONF_DIR, 'base.yaml')
 
-REDIS_PRODUCTION_CHANNEL = "proxy:production:channel"
+config = Config.from_yaml(file_name)
 
-VALID_URL = "http://httpbin.org/ip"
-THREADNUM = 4
+REQUESTS_TIMEOUT = config['request.timeout']
 
-MYSQL_HOME = "localhost"
-MYSQL_USER = "root"
-MYSQL_PASSWD = "123456"
-MYSQL_PROXY_CHANNEL = "proxypool"
+REDIS_HOST = config['redis.host']
+REDIS_PORT = config['redis.port']
+REDIS_PASSWORD = config['redis.passwd']
 
-REFRESH_NUM = 20
+REDIS_PRODUCTION_CHANNEL = config['redis.production_channel']
 
-MAX_IP = 30
+VALID_URL = config['valid.url']
+
+THREADNUM = config['threadpool.num']
+
+MYSQL_HOME = config["mysql.host"]
+MYSQL_USER = config["mysql.user"]
+MYSQL_PASSWD = config["mysql.passwd"]
+MYSQL_PROXY_CHANNEL = config["mysql.proxy_channel"]
+
+REFRESH_NUM = config["refresh.num"]
+
+MAX_IP = config["refresh.max_ip"]
