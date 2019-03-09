@@ -20,8 +20,8 @@ class ProxyRefreshScheduler:
 
     @staticmethod
     def _run():
-        proxy_data = RefreshManager().refresh()
-        ProductionManager().production(proxy_data)
+        proxy_data, proxy_channel = RefreshManager().refresh()
+        ProductionManager().production(proxy_data, proxy_channel)
         Logger("ProxyPool").get_log().info("[ProxyRefreshScheduler] Refresh Proxy And Add To The Production Queue")
 
 
