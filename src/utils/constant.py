@@ -22,7 +22,7 @@ THREADNUM = config['threadpool.num']
 MYSQL_HOME = config["mysql.host"]
 MYSQL_USER = config["mysql.user"]
 MYSQL_PASSWD = config["mysql.passwd"]
-MYSQL_PROXY_CHANNEL = config["mysql.proxy_channel"]
+MYSQL_PROXY_CHANNEL = config["mysql.database"]
 
 REFRESH_NUM = config["refresh.num"]
 

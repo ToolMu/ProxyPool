@@ -20,8 +20,8 @@ class ProxyGetScheduler:
     @staticmethod
     def _run():
         for _ in range(4):
-            proxy_data = GetterManager().random_proxy_get()
-            ProductionManager().production(proxy_data)
+            proxy_data, proxy_channel = GetterManager().random_proxy_get()
+            ProductionManager().production(proxy_data, proxy_channel)
         Logger("ProxyPool").get_log().info("[ProxyGetScheduler] Get Proxy And Add To The Production Queue")
 
 
