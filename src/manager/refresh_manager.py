@@ -5,6 +5,8 @@ from src.utils.constant import MYSQL_HOME, MYSQL_USER, MYSQL_PASSWD, MYSQL_PROXY
 from src.utils.constant import MAX_IP
 from src.utils.constant import REFRESH_NUM
 
+MAX_IP = 1
+
 
 class RefreshManager(metaclass=SingletonMetaClass):
 
@@ -18,7 +20,7 @@ class RefreshManager(metaclass=SingletonMetaClass):
         if _mysql_cursor.fetchone()[0] < MAX_IP:
             return []
 
-        select_sql = "SELECT ip_str FROM proxyip ORDER BY ip_in_time, ip_id LIMIT 0, {}".format(REFRESH_NUM)
+        select_sql = "SELECT ip_str, ip_channel FROM proxyip ORDER BY ip_in_time, ip_id LIMIT 0, {}".format(REFRESH_NUM)
         _mysql_cursor.execute(select_sql)
         refresh_ips = []
 
@@ -31,13 +33,12 @@ class RefreshManager(metaclass=SingletonMetaClass):
             except Exception as e:
                 self._mysql_con.rollback()
 
-        for item in refresh_ips:
-            yield item
+        return refresh_ips, 'refresh_ip'
 
 
 if __name__ == '__main__':
     from src.manager.raw_manager import ProductionManager
 
-    refresh_data = RefreshManager().refresh()
-    ProductionManager().production(refresh_data)
+    refresh_data, refresh_channel = RefreshManager().refresh()
+    ProductionManager().production(refresh_data, refresh_channel)
     print("OK!")
