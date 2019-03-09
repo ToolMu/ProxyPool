@@ -1,4 +1,5 @@
 import time
+import pickle
 
 import redis
 import pymysql
@@ -21,14 +22,16 @@ class ValidManager:
     def consumption(self):
         while True:
             rcon = redis.Redis(connection_pool=self._connect_pool)
-            proxy_task = rcon.blpop(REDIS_PRODUCTION_CHANNEL, 0)[1]
-            self._valid_pool.add(ProxyValid.valid_proxy, (proxy_task,), self._save)
+            proxy_tuple = rcon.blpop(REDIS_PRODUCTION_CHANNEL, 0)[1]
+            proxy_task, proxy_channel = pickle.loads(proxy_tuple)
+            self._valid_pool.add(ProxyValid.valid_proxy, (proxy_task, proxy_channel, ), self._save)
             self._logger.info("[ValidManager] >> add {} to valid Queue!".format(proxy_task))
 
     def _save(self, status):
         if status is not None and isinstance(status, tuple) and status[0]:
-            insert_sql = "INSERT INTO {base_name}.proxyip (ip_str, ip_in_time) VALUES ('{ip_info}', '{new_time}')".format(
-                base_name=MYSQL_PROXY_CHANNEL, ip_info=status[1], new_time=str(time.time())
+            insert_sql = "INSERT INTO {base_name}.proxyip(ip_str, ip_channel, ip_in_time) " \
+                         "VALUES ('{ip_info}', '{ip_channel}', '{new_time}')".format(
+                base_name=MYSQL_PROXY_CHANNEL, ip_info=status[1], ip_channel=status[2], new_time=str(time.time())
             )
             _mysql_cursor = self._mysql_con.cursor()
             try:
@@ -37,7 +40,7 @@ class ValidManager:
                 self._logger.info("[ValidManager] >> Get Using One {}".format(status[1]))
             except Exception as e:
                 self._mysql_con.rollback()
-                self._logger.info("[ValidManager] >> lose save Using One {}".format(status[1]))
+                self._logger.info("[ValidManager] >> lose save Using One {}, result {}".format(status[1], e))
         else:
             self._logger.warning("[ValidManager] >> Lose One: {}".format(status[1]))
 
